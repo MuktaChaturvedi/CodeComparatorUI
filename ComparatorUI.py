@@ -2,6 +2,14 @@ import streamlit as st
 import json
 
 def main():
+    st.markdown("""
+    <style>
+    /* Center the title */
+    .title {
+        text-align: center;
+    }
+    </style>
+    """, unsafe_allow_html=True)
     st.title("MAWM CODE COMPARATOR")
 
     # Layout setup
