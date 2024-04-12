@@ -22,10 +22,10 @@ def main():
         target_organization = st.text_input("Target Organisation")
 
     # Add a divider between the two sides
-    st.write("---")
+    # st.write("---")
 
     # Center-align the additional fields
-    st.write("<h2 style='text-align: center;'>Additional Fields</h2>", unsafe_allow_html=True)
+    # st.write("<h2 style='text-align: center;'>Additional Fields</h2>", unsafe_allow_html=True)
 
     # Email, Category, and Component/Extension Pack fields
     st.write("<div style='display: flex; justify-content: center;'>", unsafe_allow_html=True)
