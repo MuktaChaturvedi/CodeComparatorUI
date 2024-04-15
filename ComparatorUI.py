@@ -10,6 +10,7 @@ def main():
     # Left side - Source Organisation
     with left_column:
         st.subheader("Source Organisation")
+        sourceURL=st.text_input("sourceURL")
         source_username = st.text_input("Source Username")
         source_password = st.text_input("Source Password", type="password")
         source_organization = st.text_input("Source Organisation")
@@ -17,6 +18,7 @@ def main():
     # Right side - Target Organisation
     with right_column:
         st.subheader("Target Organisation")
+        targetURL=st.text_input("targetURL")
         target_username = st.text_input("Target Username")
         target_password = st.text_input("Target Password", type="password")
         target_organization = st.text_input("Target Organisation")
@@ -49,18 +51,18 @@ def main():
 
     # Compare button
     if st.button("Compare"):
-        if not all([source_username, source_password, source_organization,
+        if not all([sourceURL,source_username, source_password, source_organization,targetURL,
                     target_username, target_password, target_organization,
                     email_id, category, selected_items, tech_to_compare]):
             st.error("Please fill in all required fields before proceeding.")
-        elif tech_to_compare == "Extended Attribute" and source_organization == target_organization:
+        elif tech_to_compare == "Extended Attribute" and sourceURL == targetURL:
             st.error("For Extended Attribute, source and destination organizations should be different.")
         else:
-            open_new_tab(source_username, source_password, source_organization,
+            open_new_tab(sourceURL,source_username, source_password, source_organization,targetURL,
                          target_username, target_password, target_organization,
                          email_id, category, selected_items, tech_to_compare)
 
-def open_new_tab(source_username, source_password, source_organization,
+def open_new_tab(sourceURL,source_username, source_password, source_organization,targetURL,
                  target_username, target_password, target_organization,
                  email_id, category, selected_items, tech_to_compare):
     st.write("Click the button below to open a new tab with user inputs")
@@ -68,9 +70,11 @@ def open_new_tab(source_username, source_password, source_organization,
     # Construct message with user inputs
     message = f"<h1>MAWM CODE COMPARATOR</h1>"
     message += "<h2>User Inputs:</h2>"
+    message += f"<p>Source URL: {sourceURL}</p>"
     message += f"<p>Source Username: {source_username}</p>"
     message += f"<p>Source Password: {source_password}</p>"
     message += f"<p>Source Organisation: {source_organization}</p>"
+    message += f"<p>Target URL: {targetURL}</p>"
     message += f"<p>Target Username: {target_username}</p>"
     message += f"<p>Target Password: {target_password}</p>"
     message += f"<p>Target Organisation: {target_organization}</p>"
