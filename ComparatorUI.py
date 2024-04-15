@@ -2,14 +2,6 @@ import streamlit as st
 import json
 
 def main():
-    st.markdown("""
-    <style>
-    /* Center the title */
-    .title {
-        text-align: center;
-    }
-    </style>
-    """, unsafe_allow_html=True)
     st.title("MAWM CODE COMPARATOR")
 
     # Layout setup
@@ -32,12 +24,11 @@ def main():
     # Add a divider between the two sides
     # st.write("---")
 
-    # Center-align the additional fields
-    # st.write("<h2 style='text-align: center;'>Additional Fields</h2>", unsafe_allow_html=True)
-
-    # Email, Category, and Component/Extension Pack fields
-    st.write("<div style='display: flex; justify-content: center;'>", unsafe_allow_html=True)
+    # Additional fields
+    # st.subheader("Additional Fields")
     email_id = st.text_input("Email ID")
+
+    # Category and Component/Extension Pack fields
     category = st.selectbox("Category", ["Component", "Extension Pack"])
 
     selected_items = []
@@ -52,22 +43,26 @@ def main():
                 selected_items = st.multiselect("Select Extension Packs", extension_names)
             except json.JSONDecodeError:
                 st.error("Invalid JSON file. Please upload a valid JSON file which contains OneBoardName.")
-    st.write("</div>", unsafe_allow_html=True)
+
+    # Tech to compare field
+    tech_to_compare = st.selectbox("Tech to Compare", ["Handler", "Service Definition", "Metadata", "Extended Attribute", "Message Types", "Application Parameter", "DSL"])
 
     # Compare button
     if st.button("Compare"):
         if not all([source_username, source_password, source_organization,
                     target_username, target_password, target_organization,
-                    email_id, category, selected_items]):
+                    email_id, category, selected_items, tech_to_compare]):
             st.error("Please fill in all required fields before proceeding.")
+        elif tech_to_compare == "Extended Attribute" and source_organization == target_organization:
+            st.error("For Extended Attribute, source and destination organizations should be different.")
         else:
             open_new_tab(source_username, source_password, source_organization,
                          target_username, target_password, target_organization,
-                         email_id, category, selected_items)
+                         email_id, category, selected_items, tech_to_compare)
 
 def open_new_tab(source_username, source_password, source_organization,
                  target_username, target_password, target_organization,
-                 email_id, category, selected_items):
+                 email_id, category, selected_items, tech_to_compare):
     st.write("Click the button below to open a new tab with user inputs")
 
     # Construct message with user inputs
@@ -87,6 +82,7 @@ def open_new_tab(source_username, source_password, source_organization,
         for item in selected_items:
             message += f"<li>{item}</li>"
         message += "</ul>"
+    message += f"<p>Tech to Compare: {tech_to_compare}</p>"
 
     # Embed HTML with JavaScript to open a new tab
     html_string = f"""
