@@ -28,7 +28,7 @@ def main():
     # st.subheader("Additional Fields")
     # Category and Component/Extension Pack fields
     # category = st.selectbox("Category", ["Component", "Extension Pack"])
-    category = st.selectbox("Category", ["Component", "Extension Pack"])
+    category = st.radio("Category", ["Component", "Extension Pack"])
 
     selected_items = []
     if category == "Component":
