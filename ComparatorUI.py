@@ -26,9 +26,8 @@ def main():
 
     # Additional fields
     # st.subheader("Additional Fields")
-    email_id = st.text_input("Email ID")
-
     # Category and Component/Extension Pack fields
+    # category = st.selectbox("Category", ["Component", "Extension Pack"])
     category = st.selectbox("Category", ["Component", "Extension Pack"])
 
     selected_items = []
@@ -46,6 +45,7 @@ def main():
 
     # Tech to compare field
     tech_to_compare = st.selectbox("Tech to Compare", ["Handler", "Service Definition", "Metadata", "Extended Attribute", "Message Types", "Application Parameter", "DSL"])
+    email_id = st.text_input("Email ID")
 
     # Compare button
     if st.button("Compare"):
