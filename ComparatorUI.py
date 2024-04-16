@@ -49,11 +49,11 @@ def main():
 
     # Compare button
     if st.button("Compare"):
-        if not all([sourceURL, source_username, source_password, source_organization,
-                    targetURL, target_username, target_password, target_organization,
+        if not all([source_username, source_password, source_organization,
+                    target_username, target_password, target_organization,
                     email_id, category, selected_items, tech_to_compare]):
             st.error("Please fill in all required fields before proceeding.")
-        elif tech_to_compare == "Extended Attribute" and sourceURL == targetURL:
+        elif tech_to_compare == "Extended Attribute" and source_organization == target_organization:
             st.error("For Extended Attribute, source and destination organizations should be different.")
         else:
             file_name = f"ASDA{datetime.now().strftime('%d%b%Y')}.html"  # e.g., ASDA15Apr2024.html
