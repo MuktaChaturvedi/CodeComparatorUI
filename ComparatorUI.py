@@ -58,7 +58,8 @@ def main():
             html_content = create_html_content(sourceURL, source_username, source_password, source_organization,
                                                targetURL, target_username, target_password, target_organization,
                                                email_id, category, selected_items, tech_to_compare)
-            st.markdown(html_content, unsafe_allow_html=True)
+            filename = f"ASDA_{datetime.now().strftime('%b%d%Y')}.html"
+            write_to_new_tab(html_content, filename)
 
 def create_html_content(sourceURL, source_username, source_password, source_organization,
                         targetURL, target_username, target_password, target_organization,
@@ -82,6 +83,15 @@ def create_html_content(sourceURL, source_username, source_password, source_orga
         message += "</ul>"
     message += f"<p>Tech to Compare: {tech_to_compare}</p>"
     return message
+
+def write_to_new_tab(html_content, filename):
+    # Write HTML content to temporary file
+    with open(filename, "w") as f:
+        f.write(html_content)
+    
+    # Open new browser tab with the temporary file
+    new_tab_url = f"data:text/html;charset=utf-8,{html_content}"
+    st.markdown(f'<a href="{new_tab_url}" target="_blank">Open in new tab</a>', unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
