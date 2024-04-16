@@ -58,22 +58,20 @@ def main():
         else:
             file_name = f"ASDA{datetime.now().strftime('%d%b%Y')}.html"  # e.g., ASDA15Apr2024.html
             folder_path = os.path.join("html_files", file_name)
-            create_html_file(folder_path, sourceURL, source_username, source_password, source_organization,
-                             targetURL, target_username, target_password, target_organization,
+            create_html_file(folder_path, source_username, source_password, source_organization,
+                             target_username, target_password, target_organization,
                              email_id, category, selected_items, tech_to_compare)
             open_in_new_tab(folder_path)
 
-def create_html_file(file_path, sourceURL, source_username, source_password, source_organization,
-                     targetURL, target_username, target_password, target_organization,
+def create_html_file(file_path, source_username, source_password, source_organization,
+                     target_username, target_password, target_organization,
                      email_id, category, selected_items, tech_to_compare):
     # Construct message with user inputs
     message = f"<h1>MAWM CODE COMPARATOR</h1>"
     message += "<h2>User Inputs:</h2>"
-    message += f"<p>Source URL: {sourceURL}</p>"
     message += f"<p>Source Username: {source_username}</p>"
     message += f"<p>Source Password: {source_password}</p>"
     message += f"<p>Source Organisation: {source_organization}</p>"
-    message += f"<p>Target URL: {targetURL}</p>"
     message += f"<p>Target Username: {target_username}</p>"
     message += f"<p>Target Password: {target_password}</p>"
     message += f"<p>Target Organisation: {target_organization}</p>"
