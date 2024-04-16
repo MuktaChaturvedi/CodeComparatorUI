@@ -1,8 +1,3 @@
-import streamlit as st
-import json
-import base64
-from datetime import datetime
-
 def main():
     st.title("MAWM CODE COMPARATOR")
 
@@ -60,48 +55,12 @@ def main():
                                                email_id, category, selected_items, tech_to_compare)
             filename = f"ASDA_{datetime.now().strftime('%b%d%Y')}.html"
             download_html_file(html_content, filename)
-            open_new_tab(filename)
+            open_new_tab()
 
-def create_html_content(sourceURL, source_username, source_password, source_organization,
-                        targetURL, target_username, target_password, target_organization,
-                        email_id, category, selected_items, tech_to_compare):
-    # Construct message with user inputs
-    message = f"<h1>MAWM CODE COMPARATOR</h1>"
-    message += "<h2>User Inputs:</h2>"
-    message += f"<p>Source URL: {sourceURL}</p>"
-    message += f"<p>Source Username: {source_username}</p>"
-    message += f"<p>Source Organisation: {source_organization}</p>"
-    message += f"<p>Target URL: {targetURL}</p>"
-    message += f"<p>Target Username: {target_username}</p>"
-    message += f"<p>Target Organisation: {target_organization}</p>"
-    message += f"<p>Email ID: {email_id}</p>"
-    message += f"<p>Category: {category}</p>"
-    if selected_items:
-        message += "<p>Selected Items:</p>"
-        message += "<ul>"
-        for item in selected_items:
-            message += f"<li>{item}</li>"
-        message += "</ul>"
-    message += f"<p>Tech to Compare: {tech_to_compare}</p>"
-    return message
-
-def download_html_file(html_content, filename):
-    # Convert HTML content to bytes
-    html_bytes = html_content.encode("utf-8")
-
-    # Download HTML file
-    st.download_button(
-        label="Download HTML file",
-        data=html_bytes,
-        file_name=filename,
-        mime="text/html"
-    )
-
-    def open_new_tab():
-        today = datetime.now().strftime('%b%d%Y')
-        url = f"ASDA_{today}.html"  # Construct dynamic URL
-        st.markdown(f'<a href="{url}" target="_blank">Open in new tab</a>', unsafe_allow_html=True)
-
+def open_new_tab():
+    today = datetime.now().strftime('%b%d%Y')
+    url = f"ASDA_{today}.html"  # Construct dynamic URL
+    st.markdown(f'<a href="{url}" target="_blank">Open in new tab</a>', unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
