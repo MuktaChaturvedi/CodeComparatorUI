@@ -2,7 +2,6 @@ import streamlit as st
 import json
 import base64
 from datetime import datetime
-import time
 
 def main():
     st.title("MAWM CODE COMPARATOR")
@@ -60,7 +59,8 @@ def main():
                                                targetURL, target_username, target_password, target_organization,
                                                email_id, category, selected_items, tech_to_compare)
             filename = f"ASDA_{datetime.now().strftime('%b%d%Y')}.html"
-            write_to_new_tab(html_content, filename)
+            download_html_file(html_content, filename)
+            open_new_tab(filename)
 
 def create_html_content(sourceURL, source_username, source_password, source_organization,
                         targetURL, target_username, target_password, target_organization,
@@ -85,19 +85,21 @@ def create_html_content(sourceURL, source_username, source_password, source_orga
     message += f"<p>Tech to Compare: {tech_to_compare}</p>"
     return message
 
-def write_to_new_tab(html_content, filename):
-    # Convert HTML content to base64
+def download_html_file(html_content, filename):
+    # Convert HTML content to bytes
     html_bytes = html_content.encode("utf-8")
-    b64 = base64.b64encode(html_bytes).decode("utf-8")
 
-    # Generate data URL
-    href = f"data:text/html;base64,{b64}"
+    # Download HTML file
+    st.download_button(
+        label="Download HTML file",
+        data=html_bytes,
+        file_name=filename,
+        mime="text/html"
+    )
 
-    # Add a delay before opening the new tab
-    time.sleep(1)
-
-    # Create link to open in new tab
-    st.markdown(f'<a href="{href}" target="_blank">Open in new tab</a>', unsafe_allow_html=True)
+def open_new_tab(filename):
+    url = f"ASDA_{datetime.now().strftime('%b%d%Y')}"
+    st.markdown(f'<a href="{url}" target="_blank">Open in new tab</a>', unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
