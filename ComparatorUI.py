@@ -13,16 +13,16 @@ def main():
     # Left side - Source Organisation
     with left_column:
         st.subheader("Source Organisation")
-        sourceURL = st.text_input("sourceURL")
         source_username = st.text_input("Source Username")
+        log_username(source_username)  # Log the username
         source_password = st.text_input("Source Password", type="password")
         source_organization = st.text_input("Source Organisation")
 
     # Right side - Target Organisation
     with right_column:
         st.subheader("Target Organisation")
-        targetURL = st.text_input("targetURL")
         target_username = st.text_input("Target Username")
+        log_username(target_username)  # Log the username
         target_password = st.text_input("Target Password", type="password")
         target_organization = st.text_input("Target Organisation")
 
@@ -57,37 +57,45 @@ def main():
             st.error("For Extended Attribute, source and destination organizations should be different.")
         else:
             file_name = f"ASDA{datetime.now().strftime('%d%b%Y')}.html"  # e.g., ASDA15Apr2024.html
-            folder_path = os.path.join("html_files", file_name)
-            create_html_file(folder_path, source_username, source_password, source_organization,
+            folder_path = "html_files"  # Path to the folder where the HTML file will be created
+            file_path = os.path.join(folder_path, file_name)
+            create_html_file(file_path, source_username, source_password, source_organization,
                              target_username, target_password, target_organization,
                              email_id, category, selected_items, tech_to_compare)
-            open_in_new_tab(folder_path)
+            open_in_new_tab(file_path)
+
+def log_username(username):
+    if username:
+        st.write(f"Username entered: {username}")
 
 def create_html_file(file_path, source_username, source_password, source_organization,
                      target_username, target_password, target_organization,
                      email_id, category, selected_items, tech_to_compare):
-    # Construct message with user inputs
-    message = f"<h1>MAWM CODE COMPARATOR</h1>"
-    message += "<h2>User Inputs:</h2>"
-    message += f"<p>Source Username: {source_username}</p>"
-    message += f"<p>Source Password: {source_password}</p>"
-    message += f"<p>Source Organisation: {source_organization}</p>"
-    message += f"<p>Target Username: {target_username}</p>"
-    message += f"<p>Target Password: {target_password}</p>"
-    message += f"<p>Target Organisation: {target_organization}</p>"
-    message += f"<p>Email ID: {email_id}</p>"
-    message += f"<p>Category: {category}</p>"
-    if selected_items:
-        message += "<p>Selected Items:</p>"
-        message += "<ul>"
-        for item in selected_items:
-            message += f"<li>{item}</li>"
-        message += "</ul>"
-    message += f"<p>Tech to Compare: {tech_to_compare}</p>"
+    try:
+        # Construct message with user inputs
+        message = f"<h1>MAWM CODE COMPARATOR</h1>"
+        message += "<h2>User Inputs:</h2>"
+        message += f"<p>Source Username: {source_username}</p>"
+        message += f"<p>Source Password: {source_password}</p>"
+        message += f"<p>Source Organisation: {source_organization}</p>"
+        message += f"<p>Target Username: {target_username}</p>"
+        message += f"<p>Target Password: {target_password}</p>"
+        message += f"<p>Target Organisation: {target_organization}</p>"
+        message += f"<p>Email ID: {email_id}</p>"
+        message += f"<p>Category: {category}</p>"
+        if selected_items:
+            message += "<p>Selected Items:</p>"
+            message += "<ul>"
+            for item in selected_items:
+                message += f"<li>{item}</li>"
+            message += "</ul>"
+        message += f"<p>Tech to Compare: {tech_to_compare}</p>"
 
-    # Write message to HTML file
-    with open(file_path, "w") as f:
-        f.write(message)
+        # Write message to HTML file
+        with open(file_path, "w") as f:
+            f.write(message)
+    except Exception as e:
+        st.error(f"Error occurred while creating HTML file: {e}")
 
 def open_in_new_tab(file_path):
     webbrowser.open_new_tab(file_path)
