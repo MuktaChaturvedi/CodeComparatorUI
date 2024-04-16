@@ -1,6 +1,7 @@
 import streamlit as st
 import json
 import os
+import webbrowser
 from datetime import datetime
 
 def main():
@@ -55,16 +56,19 @@ def main():
         elif tech_to_compare == "Extended Attribute" and sourceURL == targetURL:
             st.error("For Extended Attribute, source and destination organizations should be different.")
         else:
-            file_name = f"ASDA_{datetime.now().strftime('%d%b%Y_%H%M%S')}.html"  # e.g., ASDA15Apr2024_121530.html
-            folder_path = os.path.join("html_files", file_name)
-            create_html_file(folder_path, sourceURL, source_username, source_password, source_organization,
-                             targetURL, target_username, target_password, target_organization,
-                             email_id, category, selected_items, tech_to_compare)
-            open_in_new_tab(folder_path)
+            # Run processing code directly
+            html_file_path = process_comparison(sourceURL, source_username, source_password, source_organization,
+                                                targetURL, target_username, target_password, target_organization,
+                                                email_id, category, selected_items, tech_to_compare)
+            if html_file_path:
+                st.success("Comparison completed successfully.")
+                st.write(f"Download the result: [Download HTML]({html_file_path})")
+            else:
+                st.error("Failed to generate HTML file.")
 
-def create_html_file(file_path, sourceURL, source_username, source_password, source_organization,
-                     targetURL, target_username, target_password, target_organization,
-                     email_id, category, selected_items, tech_to_compare):
+def process_comparison(sourceURL, source_username, source_password, source_organization,
+                       targetURL, target_username, target_password, target_organization,
+                       email_id, category, selected_items, tech_to_compare):
     # Construct message with user inputs
     message = f"<h1>MAWM CODE COMPARATOR</h1>"
     message += "<h2>User Inputs:</h2>"
@@ -87,11 +91,12 @@ def create_html_file(file_path, sourceURL, source_username, source_password, sou
     message += f"<p>Tech to Compare: {tech_to_compare}</p>"
 
     # Write message to HTML file
-    with open(file_path, "w") as f:
+    file_name = f"ASDA{datetime.now().strftime('%d%b%Y')}.html"
+    folder_path = os.path.join("html_files", file_name)
+    with open(folder_path, "w") as f:
         f.write(message)
 
-def open_in_new_tab(file_path):
-    st.markdown(f'<iframe src="{file_path}" style="width:100%; height:500px;"></iframe>', unsafe_allow_html=True)
+    return folder_path
 
 if __name__ == "__main__":
     main()
