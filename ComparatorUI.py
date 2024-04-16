@@ -85,13 +85,15 @@ def create_html_content(sourceURL, source_username, source_password, source_orga
     return message
 
 def write_to_new_tab(html_content, filename):
-    # Write HTML content to temporary file
-    with open(filename, "w") as f:
-        f.write(html_content)
-    
-    # Open new browser tab with the temporary file
-    new_tab_url = f"data:text/html;charset=utf-8,{html_content}"
-    st.markdown(f'<a href="{new_tab_url}" target="_blank">Open in new tab</a>', unsafe_allow_html=True)
+    # Convert HTML content to base64
+    html_bytes = html_content.encode("utf-8")
+    b64 = base64.b64encode(html_bytes).decode("utf-8")
+
+    # Generate data URL
+    href = f"data:text/html;base64,{b64}"
+
+    # Create link to open in new tab
+    st.markdown(f'<a href="{href}" target="_blank">Open in new tab</a>', unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
