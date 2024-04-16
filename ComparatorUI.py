@@ -2,6 +2,7 @@ import streamlit as st
 import json
 import base64
 from datetime import datetime
+import time
 
 def main():
     st.title("MAWM CODE COMPARATOR")
@@ -92,8 +93,13 @@ def write_to_new_tab(html_content, filename):
     # Generate data URL
     href = f"data:text/html;base64,{b64}"
 
+    # Add a progress bar
+    progress_bar = st.progress(0)
+
+    # Simulate processing time
+    for percent_complete in range(0, 101, 10):
+        time.sleep(0.1)
+        progress_bar.progress(percent_complete)
+
     # Create link to open in new tab
     st.markdown(f'<a href="{href}" target="_blank">Open in new tab</a>', unsafe_allow_html=True)
-
-if __name__ == "__main__":
-    main()
