@@ -1,7 +1,6 @@
 import streamlit as st
 import json
 import os
-import webbrowser
 from datetime import datetime
 
 def main():
@@ -61,7 +60,7 @@ def main():
             create_html_file(folder_path, sourceURL, source_username, source_password, source_organization,
                              targetURL, target_username, target_password, target_organization,
                              email_id, category, selected_items, tech_to_compare)
-            open_in_new_tab(folder_path, file_name)
+            open_in_new_tab(file_name)
 
 def create_html_file(file_path, sourceURL, source_username, source_password, source_organization,
                      targetURL, target_username, target_password, target_organization,
@@ -91,9 +90,9 @@ def create_html_file(file_path, sourceURL, source_username, source_password, sou
     with open(file_path, "w") as f:
         f.write(message)
 
-def open_in_new_tab(file_path, file_name):
+def open_in_new_tab(file_name):
     url = f"html_files/{file_name}"
-    webbrowser.open_new_tab(url)
+    st.markdown(f'<a href="{url}" target="_blank">Open in new tab</a>', unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
