@@ -58,10 +58,7 @@ def main():
             html_content = create_html_content(sourceURL, source_username, source_password, source_organization,
                                                targetURL, target_username, target_password, target_organization,
                                                email_id, category, selected_items, tech_to_compare)
-            filename = f"ASDA_{datetime.now().strftime('%d%b%Y')}.html"
-            b64 = base64.b64encode(html_content.encode()).decode()
-            href = f'<a href="data:text/html;base64,{b64}" download="{filename}">Click here to download</a>'
-            st.markdown(href, unsafe_allow_html=True)
+            st.markdown(html_content, unsafe_allow_html=True)
 
 def create_html_content(sourceURL, source_username, source_password, source_organization,
                         targetURL, target_username, target_password, target_organization,
