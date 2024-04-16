@@ -57,14 +57,12 @@ def main():
             st.error("For Extended Attribute, source and destination organizations should be different.")
         else:
             # Run processing code directly
-            html_file_path = process_comparison(sourceURL, source_username, source_password, source_organization,
+            html_content = process_comparison(sourceURL, source_username, source_password, source_organization,
                                                 targetURL, target_username, target_password, target_organization,
                                                 email_id, category, selected_items, tech_to_compare)
-            if html_file_path:
-                st.success("Comparison completed successfully.")
-                st.write(f"Download the result: [Download HTML]({html_file_path})")
-            else:
-                st.error("Failed to generate HTML file.")
+            if html_content:
+                # Open new tab with HTML content
+                open_in_new_tab(html_content)
 
 def process_comparison(sourceURL, source_username, source_password, source_organization,
                        targetURL, target_username, target_password, target_organization,
@@ -90,13 +88,16 @@ def process_comparison(sourceURL, source_username, source_password, source_organ
         message += "</ul>"
     message += f"<p>Tech to Compare: {tech_to_compare}</p>"
 
-    # Write message to HTML file
-    file_name = f"ASDA{datetime.now().strftime('%d%b%Y')}.html"
-    folder_path = os.path.join("html_files", file_name)
-    with open(folder_path, "w") as f:
-        f.write(message)
+    return message
 
-    return folder_path
+def open_in_new_tab(html_content):
+    # Write content to temporary HTML file
+    temp_file_path = "temp.html"
+    with open(temp_file_path, "w") as f:
+        f.write(html_content)
+
+    # Open new tab with temporary HTML file
+    webbrowser.open_new_tab(temp_file_path)
 
 if __name__ == "__main__":
     main()
