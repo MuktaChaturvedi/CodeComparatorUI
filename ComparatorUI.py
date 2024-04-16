@@ -98,9 +98,9 @@ def download_html_file(html_content, filename):
     )
 
     def open_new_tab():
-    today = datetime.now().strftime('%b%d%Y')
-    url = f"ASDA_{today}.html"  # Construct dynamic URL
-    st.markdown(f'<a href="{url}" target="_blank">Open in new tab</a>', unsafe_allow_html=True)
+        today = datetime.now().strftime('%b%d%Y')
+        url = f"ASDA_{today}.html"  # Construct dynamic URL
+        st.markdown(f'<a href="{url}" target="_blank">Open in new tab</a>', unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
