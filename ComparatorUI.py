@@ -60,7 +60,7 @@ def main():
             create_html_file(folder_path, sourceURL, source_username, source_password, source_organization,
                              targetURL, target_username, target_password, target_organization,
                              email_id, category, selected_items, tech_to_compare)
-            open_in_new_tab(file_name)
+            open_in_new_tab(folder_path)
 
 def create_html_file(file_path, sourceURL, source_username, source_password, source_organization,
                      targetURL, target_username, target_password, target_organization,
@@ -90,9 +90,8 @@ def create_html_file(file_path, sourceURL, source_username, source_password, sou
     with open(file_path, "w") as f:
         f.write(message)
 
-def open_in_new_tab(file_name):
-    url = f"html_files/{file_name}"
-    st.markdown(f'<a href="{url}" target="_blank">Open in new tab</a>', unsafe_allow_html=True)
+def open_in_new_tab(file_path):
+    st.markdown(f'<iframe src="{file_path}" style="width:100%; height:500px;"></iframe>', unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
