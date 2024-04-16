@@ -11,7 +11,6 @@ def main():
     # Left side - Source Organisation
     with left_column:
         st.subheader("Source Organisation")
-        sourceURL = st.text_input("sourceURL")
         source_username = st.text_input("Source Username")
         source_password = st.text_input("Source Password", type="password")
         source_organization = st.text_input("Source Organisation")
@@ -19,13 +18,12 @@ def main():
     # Right side - Target Organisation
     with right_column:
         st.subheader("Target Organisation")
-        targetURL = st.text_input("targetURL")
         target_username = st.text_input("Target Username")
         target_password = st.text_input("Target Password", type="password")
         target_organization = st.text_input("Target Organisation")
 
     # Additional fields
-    category = st.radio("Category", ["Component", "Extension Pack"])
+    category = st.selectbox("Category", ["Component", "Extension Pack"])
 
     selected_items = []
     if category == "Component":
@@ -47,29 +45,31 @@ def main():
 
     # Compare button
     if st.button("Compare"):
-        if not all([sourceURL, source_username, source_password, source_organization,
-                    targetURL, target_username, target_password, target_organization,
+        if not all([source_username, source_password, source_organization,
+                    target_username, target_password, target_organization,
                     email_id, category, selected_items, tech_to_compare]):
             st.error("Please fill in all required fields before proceeding.")
-        elif tech_to_compare == "Extended Attribute" and sourceURL == targetURL:
+        elif tech_to_compare == "Extended Attribute" and source_organization == target_organization:
             st.error("For Extended Attribute, source and destination organizations should be different.")
         else:
-            html_content = create_html_content(sourceURL, source_username, source_password, source_organization,
-                                               targetURL, target_username, target_password, target_organization,
+            html_content = create_html_content(source_username, source_password, source_organization,
+                                               target_username, target_password, target_organization,
                                                email_id, category, selected_items, tech_to_compare)
-            st.write(html_content)  # Display HTML content within Streamlit app
+            filename = f"ASDA_{datetime.now().strftime('%b%d%Y')}.html"
+            generate_html_file(html_content, filename)
+            open_new_tab(filename)
 
-def create_html_content(sourceURL, source_username, source_password, source_organization,
-                        targetURL, target_username, target_password, target_organization,
+def create_html_content(source_username, source_password, source_organization,
+                        target_username, target_password, target_organization,
                         email_id, category, selected_items, tech_to_compare):
     # Construct message with user inputs
     message = f"<h1>MAWM CODE COMPARATOR</h1>"
     message += "<h2>User Inputs:</h2>"
-    message += f"<p>Source URL: {sourceURL}</p>"
     message += f"<p>Source Username: {source_username}</p>"
+    message += f"<p>Source Password: {source_password}</p>"
     message += f"<p>Source Organisation: {source_organization}</p>"
-    message += f"<p>Target URL: {targetURL}</p>"
     message += f"<p>Target Username: {target_username}</p>"
+    message += f"<p>Target Password: {target_password}</p>"
     message += f"<p>Target Organisation: {target_organization}</p>"
     message += f"<p>Email ID: {email_id}</p>"
     message += f"<p>Category: {category}</p>"
@@ -81,6 +81,16 @@ def create_html_content(sourceURL, source_username, source_password, source_orga
         message += "</ul>"
     message += f"<p>Tech to Compare: {tech_to_compare}</p>"
     return message
+
+def generate_html_file(html_content, filename):
+    # Write HTML content to file
+    with open(filename, "w") as file:
+        file.write(html_content)
+
+def open_new_tab(filename):
+    today = datetime.now().strftime('%b%d%Y')
+    url = f"ASDA_{today}.html"
+    st.markdown(f'<a href="{url}" target="_blank">Open in new tab</a>', unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
