@@ -1,9 +1,6 @@
-import logging
-
 import streamlit as st
 import json
-import os
-import webbrowser
+import base64
 from datetime import datetime
 
 def main():
@@ -51,53 +48,43 @@ def main():
 
     # Compare button
     if st.button("Compare"):
-        if not all([source_username, source_password, source_organization,
-                    target_username, target_password, target_organization,
+        if not all([sourceURL, source_username, source_password, source_organization,
+                    targetURL, target_username, target_password, target_organization,
                     email_id, category, selected_items, tech_to_compare]):
             st.error("Please fill in all required fields before proceeding.")
-        elif tech_to_compare == "Extended Attribute" and source_organization == target_organization:
+        elif tech_to_compare == "Extended Attribute" and sourceURL == targetURL:
             st.error("For Extended Attribute, source and destination organizations should be different.")
         else:
-            file_name = f"ASDA{datetime.now().strftime('%d%b%Y')}.html"  # e.g., ASDA15Apr2024.html
-            folder_path = os.path.join("html_files", file_name)
-            create_html_file(folder_path, source_username, source_password, source_organization,
-                             target_username, target_password, target_organization,
-                             email_id, category, selected_items, tech_to_compare)
-            open_in_new_tab(folder_path)
+            html_content = create_html_content(sourceURL, source_username, source_password, source_organization,
+                                               targetURL, target_username, target_password, target_organization,
+                                               email_id, category, selected_items, tech_to_compare)
+            filename = f"ASDA_{datetime.now().strftime('%d%b%Y')}.html"
+            b64 = base64.b64encode(html_content.encode()).decode()
+            href = f'<a href="data:text/html;base64,{b64}" download="{filename}">Click here to download</a>'
+            st.markdown(href, unsafe_allow_html=True)
 
-def create_html_file(file_path, source_username, source_password, source_organization,
-                     target_username, target_password, target_organization,
-                     email_id, category, selected_items, tech_to_compare):
-    try:
-        # Ensure the directory exists
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
-
-        # Construct message with user inputs
-        message = f"<h1>MAWM CODE COMPARATOR</h1>"
-        message += "<h2>User Inputs:</h2>"
-        message += f"<p>Source Username: {source_username}</p>"
-        message += f"<p>Source Password: {source_password}</p>"
-        message += f"<p>Source Organisation: {source_organization}</p>"
-        message += f"<p>Target Username: {target_username}</p>"
-        message += f"<p>Target Password: {target_password}</p>"
-        message += f"<p>Target Organisation: {target_organization}</p>"
-        message += f"<p>Email ID: {email_id}</p>"
-        message += f"<p>Category: {category}</p>"
-        if selected_items:
-            message += "<p>Selected Items:</p>"
-            message += "<ul>"
-            for item in selected_items:
-                message += f"<li>{item}</li>"
-            message += "</ul>"
-        message += f"<p>Tech to Compare: {tech_to_compare}</p>"
-
-        # Write message to HTML file
-        with open(file_path, "w") as f:
-            f.write(message)
-    except Exception as e:
-        logging.error(f"Error occurred while creating HTML file: {e}")
-def open_in_new_tab(file_path):
-    webbrowser.open_new_tab(file_path)
+def create_html_content(sourceURL, source_username, source_password, source_organization,
+                        targetURL, target_username, target_password, target_organization,
+                        email_id, category, selected_items, tech_to_compare):
+    # Construct message with user inputs
+    message = f"<h1>MAWM CODE COMPARATOR</h1>"
+    message += "<h2>User Inputs:</h2>"
+    message += f"<p>Source URL: {sourceURL}</p>"
+    message += f"<p>Source Username: {source_username}</p>"
+    message += f"<p>Source Organisation: {source_organization}</p>"
+    message += f"<p>Target URL: {targetURL}</p>"
+    message += f"<p>Target Username: {target_username}</p>"
+    message += f"<p>Target Organisation: {target_organization}</p>"
+    message += f"<p>Email ID: {email_id}</p>"
+    message += f"<p>Category: {category}</p>"
+    if selected_items:
+        message += "<p>Selected Items:</p>"
+        message += "<ul>"
+        for item in selected_items:
+            message += f"<li>{item}</li>"
+        message += "</ul>"
+    message += f"<p>Tech to Compare: {tech_to_compare}</p>"
+    return message
 
 if __name__ == "__main__":
     main()
