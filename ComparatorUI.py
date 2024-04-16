@@ -1,3 +1,5 @@
+import logging
+
 import streamlit as st
 import json
 import os
@@ -66,32 +68,34 @@ def main():
 def create_html_file(file_path, source_username, source_password, source_organization,
                      target_username, target_password, target_organization,
                      email_id, category, selected_items, tech_to_compare):
-    # Ensure the directory exists
-    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    try:
+        # Ensure the directory exists
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
-    # Construct message with user inputs
-    message = f"<h1>MAWM CODE COMPARATOR</h1>"
-    message += "<h2>User Inputs:</h2>"
-    message += f"<p>Source Username: {source_username}</p>"
-    message += f"<p>Source Password: {source_password}</p>"
-    message += f"<p>Source Organisation: {source_organization}</p>"
-    message += f"<p>Target Username: {target_username}</p>"
-    message += f"<p>Target Password: {target_password}</p>"
-    message += f"<p>Target Organisation: {target_organization}</p>"
-    message += f"<p>Email ID: {email_id}</p>"
-    message += f"<p>Category: {category}</p>"
-    if selected_items:
-        message += "<p>Selected Items:</p>"
-        message += "<ul>"
-        for item in selected_items:
-            message += f"<li>{item}</li>"
-        message += "</ul>"
-    message += f"<p>Tech to Compare: {tech_to_compare}</p>"
+        # Construct message with user inputs
+        message = f"<h1>MAWM CODE COMPARATOR</h1>"
+        message += "<h2>User Inputs:</h2>"
+        message += f"<p>Source Username: {source_username}</p>"
+        message += f"<p>Source Password: {source_password}</p>"
+        message += f"<p>Source Organisation: {source_organization}</p>"
+        message += f"<p>Target Username: {target_username}</p>"
+        message += f"<p>Target Password: {target_password}</p>"
+        message += f"<p>Target Organisation: {target_organization}</p>"
+        message += f"<p>Email ID: {email_id}</p>"
+        message += f"<p>Category: {category}</p>"
+        if selected_items:
+            message += "<p>Selected Items:</p>"
+            message += "<ul>"
+            for item in selected_items:
+                message += f"<li>{item}</li>"
+            message += "</ul>"
+        message += f"<p>Tech to Compare: {tech_to_compare}</p>"
 
-    # Write message to HTML file
-    with open(file_path, "w") as f:
-        f.write(message)
-
+        # Write message to HTML file
+        with open(file_path, "w") as f:
+            f.write(message)
+    except Exception as e:
+        logging.error(f"Error occurred while creating HTML file: {e}")
 def open_in_new_tab(file_path):
     webbrowser.open_new_tab(file_path)
 
