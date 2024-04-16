@@ -1,6 +1,7 @@
 import streamlit as st
 import json
 import os
+import webbrowser
 from datetime import datetime
 
 def main():
@@ -55,43 +56,41 @@ def main():
         elif tech_to_compare == "Extended Attribute" and sourceURL == targetURL:
             st.error("For Extended Attribute, source and destination organizations should be different.")
         else:
-            # Run processing code directly
-            html_content = process_comparison(sourceURL, source_username, source_password, source_organization,
-                                                targetURL, target_username, target_password, target_organization,
-                                                email_id, category, selected_items, tech_to_compare)
-            if html_content:
-                st.success("Comparison completed successfully.")
-                open_in_new_tab(html_content)
+            file_name = f"MAWM_{datetime.now().strftime('%d%b%Y')}.html"  # e.g., MAWM_15Apr2024.html
+            folder_path = os.path.join("html_files", file_name)
+            create_html_file(folder_path, sourceURL, source_username, source_password, source_organization,
+                             targetURL, target_username, target_password, target_organization,
+                             email_id, category, selected_items, tech_to_compare)
+            open_in_new_tab(folder_path)
 
-def process_comparison(sourceURL, source_username, source_password, source_organization,
-                       targetURL, target_username, target_password, target_organization,
-                       email_id, category, selected_items, tech_to_compare):
-    # Construct message with user inputs
-    message = f"<h1>MAWM CODE COMPARATOR</h1>"
-    message += "<h2>User Inputs:</h2>"
-    message += f"<p>Source URL: {sourceURL}</p>"
-    message += f"<p>Source Username: {source_username}</p>"
-    # message += f"<p>Source Password: {source_password}</p>"
-    message += f"<p>Source Organisation: {source_organization}</p>"
-    message += f"<p>Target URL: {targetURL}</p>"
-    message += f"<p>Target Username: {target_username}</p>"
-    # message += f"<p>Target Password: {target_password}</p>"
-    message += f"<p>Target Organisation: {target_organization}</p>"
-    message += f"<p>Email ID: {email_id}</p>"
-    message += f"<p>Category: {category}</p>"
+def create_html_file(file_path, sourceURL, source_username, source_password, source_organization,
+                     targetURL, target_username, target_password, target_organization,
+                     email_id, category, selected_items, tech_to_compare):
+    # Construct HTML content with user inputs
+    html_content = f"<h1>MAWM CODE COMPARATOR</h1>"
+    html_content += "<h2>User Inputs:</h2>"
+    html_content += f"<p>Source URL: {sourceURL}</p>"
+    html_content += f"<p>Source Username: {source_username}</p>"
+    html_content += f"<p>Source Organisation: {source_organization}</p>"
+    html_content += f"<p>Target URL: {targetURL}</p>"
+    html_content += f"<p>Target Username: {target_username}</p>"
+    html_content += f"<p>Target Organisation: {target_organization}</p>"
+    html_content += f"<p>Email ID: {email_id}</p>"
+    html_content += f"<p>Category: {category}</p>"
     if selected_items:
-        message += "<p>Selected Items:</p>"
-        message += "<ul>"
+        html_content += "<p>Selected Items:</p>"
+        html_content += "<ul>"
         for item in selected_items:
-            message += f"<li>{item}</li>"
-        message += "</ul>"
-    message += f"<p>Tech to Compare: {tech_to_compare}</p>"
+            html_content += f"<li>{item}</li>"
+        html_content += "</ul>"
+    html_content += f"<p>Tech to Compare: {tech_to_compare}</p>"
 
-    return message
+    # Write HTML content to file
+    with open(file_path, "w") as f:
+        f.write(html_content)
 
-def open_in_new_tab(html_content):
-    # Render HTML content in a new tab using Streamlit components
-    st.components.v1.html(html_content)
+def open_in_new_tab(file_path):
+    webbrowser.open_new_tab(file_path)
 
 if __name__ == "__main__":
     main()
